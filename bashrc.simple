@@ -1,0 +1,73 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+if [ -z "$SSH_AUTH_SOCK" ]; then
+   eval "$(ssh-agent -s)" > /dev/null
+fi
+   
+# User specific aliases and functions
+if [ -d ~/.bashrc.d ]; then
+    for rc in ~/.bashrc.d/*; do
+        if [ -f "$rc" ]; then
+            . "$rc"
+        fi
+    done
+fi
+unset rc
+
+alias lh='ls -lh --color=auto'
+alias ec='emacsclient -ct'
+alias agt='/usr/bin/antigravity'
+alias ci='code-insiders'
+alias clear="clear && printf '\e[3J'"
+alias docker=podman
+alias ckup="dnf check-upgrade --refresh"
+alias pandoc="pandoc --pdf-engine=xelatex"
+alias UP="sudo /home/xijiang/.local/bin/system-upgrade.sh"
+alias mytmux="~/.config/tmux/tmux-session-manager.sh"
+alias tpw="cat ~/Desktop/.pf | tmux load-buffer -"
+
+export R_LIBS_USER="/mnt/d/R"
+export JULIA_DEPOT_PATH="$HOME/.local/share/julia"
+export JULIAUP_DEPOT_PATH="$HOME/.local/share/juliaup"
+export JULIA_NUM_THREADS=12
+export JULIA_EDITOR="emacsclient -t"
+export JUPYTER_PLATFORM_DIRS=1
+export GEMINI_CLI_HOME=~/.config/cli
+export OLLAMA_HOST="10.42.191.21"
+
+PS1="    \[\033[38;5;11m\]\u\[$(tput sgr0)\]@simple:\[$(tput sgr0)\]\[\033[38;5;6m\][\w]\[$(tput sgr0)\]\n\$ \[$(tput sgr 0)\]"
+
+# >>> juliaup initialize >>>
+
+# !! Contents within this block are managed by juliaup !!
+
+case ":$PATH:" in
+    *:/home/xijiang/.local/share/juliaup/bin:*)
+        ;;
+
+    *)
+        export PATH=/home/xijiang/.local/share/juliaup/bin${PATH:+:${PATH}}
+        ;;
+esac
+
+# <<< juliaup initialize <<<
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/xijiang/Music/google-cloud-sdk/path.bash.inc' ]; then . '/home/xijiang/Music/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/xijiang/Music/google-cloud-sdk/completion.bash.inc' ]; then . '/home/xijiang/Music/google-cloud-sdk/completion.bash.inc'; fi
