@@ -100,7 +100,22 @@ On AlmaLinux, **dnf-automatic** is used for security patches.
     ```
 *   **Enable:** `sudo systemctl enable --now dnf-automatic.timer`
 
-## 7. Credentials Reference
+## 7. Automated Docker Updates
+To keep Immich and NPM updated with the latest features and security fixes, a weekly update script is configured.
+
+*   **Update Script (`update-docker.sh`):**
+    ```bash
+    #!/bin/bash
+    set -e
+    cd ~/Music/npm && docker compose pull && docker compose up -d
+    cd /mnt/backup/immich-app && docker compose pull && docker compose up -d
+    docker image prune -f
+    ```
+*   **Automation:** Managed via systemd timer (`docker-update.timer`) to run every Sunday at 3:00 AM.
+*   **Manual Run:** `sudo systemctl start docker-update.service`
+*   **Check Logs:** `journalctl -u docker-update.service` or `tail -f /var/log/docker-update.log`
+
+## 8. Credentials Reference
 *   **Immich:** Access via `https://pi.xijiang.org`.
 *   **NPM Admin:** Access via `http://<Internal-IP>:81`.
 *   **SSH:** `ssh -p 49222 <user>@pi.xijiang.org`.
