@@ -21,7 +21,13 @@ cd /mnt/backup/immich-app
 docker compose pull
 docker compose up -d
 
-# 3. Cleanup
+# 3. Update Jellyfin
+echo "Updating Jellyfin..."
+cd ~/Music/jellyfin
+docker compose pull
+docker compose up -d
+
+# 4. Cleanup
 echo "Pruning old images..."
 docker image prune -f
 
