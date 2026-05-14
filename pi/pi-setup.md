@@ -101,7 +101,7 @@ On AlmaLinux, **dnf-automatic** is used for security patches.
 *   **Enable:** `sudo systemctl enable --now dnf-automatic.timer`
 
 ## 7. Automated Docker Updates
-To keep Immich and NPM updated with the latest features and security fixes, a weekly update script is configured.
+To keep Immich and NPM updated with the latest features and security fixes, a weekly update script is configured as a **user-level systemd service**.
 
 *   **Update Script (`update-docker.sh`):**
     ```bash
@@ -111,9 +111,15 @@ To keep Immich and NPM updated with the latest features and security fixes, a we
     cd /mnt/backup/immich-app && docker compose pull && docker compose up -d
     docker image prune -f
     ```
-*   **Automation:** Managed via systemd timer (`docker-update.timer`) to run every Sunday at 3:00 AM.
-*   **Manual Run:** `sudo systemctl start docker-update.service`
-*   **Check Logs:** `journalctl -u docker-update.service` or `tail -f /var/log/docker-update.log`
+*   **Automation:** Managed via user-level systemd timer (`docker-update.timer`) to run every Sunday at 3:00 AM.
+*   **Deployment:**
+    1. Place `update-docker.sh` in your home directory and `chmod +x`.
+    2. Place `.service` and `.timer` files in `~/.config/systemd/user/`.
+    3. `systemctl --user daemon-reload`
+    4. `systemctl --user enable --now docker-update.timer`
+*   **Manual Run:** `systemctl --user start docker-update.service`
+*   **Check Logs:** `journalctl --user -u docker-update.service` or `tail -f /var/log/docker-update.log`
+*   **Persistence:** Ensure the user session stays active after logout: `sudo loginctl enable-linger xijiang`.
 
 ## 8. Credentials Reference
 *   **Immich:** Access via `https://pi.xijiang.org`.

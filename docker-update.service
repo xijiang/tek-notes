@@ -1,15 +1,11 @@
 [Unit]
 Description=Weekly Docker Container Update
-After=network-online.target docker.service
-Wants=network-online.target
+After=network-online.target
 
 [Service]
 Type=oneshot
-User=xijiang
-WorkingDirectory=/home/xijiang
-ExecStart=/bin/bash /home/xijiang/update-docker.sh
-# StandardOutput and StandardError are handled by the script's own logging
-# but can also be seen via journalctl -u docker-update.service
+ExecStart=/bin/bash %h/update-docker.sh
+# StandardOutput and StandardError can be seen via journalctl --user -u docker-update.service
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
