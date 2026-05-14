@@ -113,10 +113,11 @@ To keep Immich and NPM updated with the latest features and security fixes, a we
     ```
 *   **Automation:** Managed via user-level systemd timer (`docker-update.timer`) to run every Sunday at 3:00 AM.
 *   **Deployment:**
-    1. Place `update-docker.sh` in your home directory and `chmod +x`.
-    2. Place `.service` and `.timer` files in `~/.config/systemd/user/`.
-    3. `systemctl --user daemon-reload`
-    4. `systemctl --user enable --now docker-update.timer`
+    1. Create the local bin directory: `mkdir -p ~/.local/bin`.
+    2. Place `update-docker.sh` in `~/.local/bin/` and `chmod +x`.
+    3. Place `.service` and `.timer` files in `~/.config/systemd/user/`.
+    4. `systemctl --user daemon-reload`
+    5. `systemctl --user enable --now docker-update.timer`
 *   **Manual Run:** `systemctl --user start docker-update.service`
 *   **Check Logs:** `journalctl --user -u docker-update.service` or `tail -f /var/log/docker-update.log`
 *   **Persistence:** Ensure the user session stays active after logout: `sudo loginctl enable-linger xijiang`.
